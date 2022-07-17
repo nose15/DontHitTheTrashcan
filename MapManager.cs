@@ -31,7 +31,7 @@ public class MapManager : MonoBehaviour
         platforms = new List<GameObject>();
         // instantiation of 300 platforms ahead of the player
 
-        for (int i = 0; i <= renderDistance; i++)
+        for (int i = -6; i <= renderDistance; i ++)
         {
             Vector3 position = new Vector3(0f, 0f, i * platformSize);
             GameObject platform = Instantiate(platformPrefab, position, platformPrefab.transform.rotation, gameLevel);

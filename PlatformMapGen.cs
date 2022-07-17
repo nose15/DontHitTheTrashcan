@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlatformMapGen : MonoBehaviour
 {
+    [SerializeField] Material regularMaterial;
+    [SerializeField] Material rocketModeMaterial;
+
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] CharMovement charMovement;
 
@@ -97,6 +100,8 @@ public class PlatformMapGen : MonoBehaviour
         blankSpaceMode = false;
 
         charMovement.rocketMode = false;
+
+        RenderSettings.skybox = regularMaterial;
     }
 
     void Start()
@@ -133,13 +138,18 @@ public class PlatformMapGen : MonoBehaviour
 
     void StillRocketMode()
     {
-        if (rocketFlightLength < 0) rocketMode = false;
+        if (rocketFlightLength < 0)
+        {
+            rocketMode = false;
+        }
     }
 
     void StartRocketMode()
     {
         rocketMode = true;
         scoreManager.rocketModeRequest = false;
+
+        RenderSettings.skybox = rocketModeMaterial;
 
         rocketFlightLength = defaultRocketFlightLength;
         defaultSectionLength = rocketFlightLength / 30;
@@ -290,6 +300,15 @@ public class PlatformMapGen : MonoBehaviour
         obstacleDistance = Random.Range(minObstacleDist, maxObstacleDist);
     }
 
+    void SetDiamonds(bool [,] platformLayout)
+    {
+        Clear2DArray(platformLayout);
+        for (int i = 0; i < 3; i++)
+        {
+            platformLayout[3, i] = true;
+        }
+    }
+
     void SetRocketCoinPool(bool[,] platformLayout)
     {
         if (sectionLength <= 0)
@@ -319,7 +338,7 @@ public class PlatformMapGen : MonoBehaviour
 
         if (!rocketMode)
         {
-            if (scoreManager.rocketModeRequest)StartRocketMode();
+            if (scoreManager.rocketModeRequest) StartRocketMode();
             if (blankSpaceDistance == 0 && !blankSpaceMode) StartBlankSpaceMode();
             if (chainDistance <= 0 && !chainMode) StartChainMode();
 
@@ -328,6 +347,7 @@ public class PlatformMapGen : MonoBehaviour
             if (blankSpaceMode) SetBlank(platformLayout);
             if (chainMode) SetChain(platformLayout);
             if (!blankSpaceMode && obstacleDistance <= 0) SetObstacle(platformLayout);
+            if (scoreManager.score % 1000 < 5 && scoreManager.score >= 1000) SetDiamonds(platformLayout);
         }
         else
         {

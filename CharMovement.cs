@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CharMovement : MonoBehaviour
 {
+    [SerializeField] Material regularMaterial;
     [SerializeField] PlatformMapGen platformMapGen;
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] InputManager inputManager;
@@ -38,7 +39,11 @@ public class CharMovement : MonoBehaviour
             rocketMode = true;
         }
 
-        if (rocketModeLength == 0) rocketMode = false;
+        if (rocketModeLength == 0)
+        {
+            rocketMode = false;
+            RenderSettings.skybox = regularMaterial;
+        }
     }
 
 

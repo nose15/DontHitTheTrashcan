@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ZoneCollectorManager : MonoBehaviour
 {
+    [SerializeField] Transform character;
     [SerializeField] ScoreManager scoreManager;
     public bool zoneMode;
 
@@ -19,5 +20,18 @@ public class ZoneCollectorManager : MonoBehaviour
             scoreManager.AddCoins();
             hitObject.gameObject.SetActive(false);
         }
+    }
+
+    private void Update()
+    {
+        if (zoneMode)
+        {
+            character.GetChild(5).gameObject.SetActive(true);
+        }
+        else
+        {
+            character.GetChild(5).gameObject.SetActive(false);
+        }
+        
     }
 }

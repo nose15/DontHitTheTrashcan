@@ -7,6 +7,7 @@ public class StateManager : MonoBehaviour
     public enum State
     {
         Home,
+        Shop,
         Resuming,
         Play,
         Idle,
@@ -33,5 +34,11 @@ public class StateManager : MonoBehaviour
     public void SetState(State state)
     {
         gameState = state;
+    }
+
+    public void EnableShop(bool enable)
+    {
+        if (enable) SetState(State.Shop);
+        else StartCoroutine(StateTransition(State.Shop, State.Home, 0.1f));
     }
 }

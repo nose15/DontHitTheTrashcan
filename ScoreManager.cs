@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
+    [SerializeField] Transform character;
     [SerializeField] MapManager mapManager;
     [SerializeField] StateManager stateManager;
     [SerializeField] PlatformMapGen platformMapGen;
@@ -13,6 +14,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] InputManager inputManager;
     [SerializeField] UIManager uiManager;
     [SerializeField] CountdownTimer countdownTimer;
+    [SerializeField] UnityEngine.UI.Text topScoreText;
 
     System.DateTime zoneStart;
     System.DateTime currentTime;
@@ -26,6 +28,7 @@ public class ScoreManager : MonoBehaviour
     public int speedIncreaseInterval;
 
     [Header("Assets")]
+    public int topScore;
     public int score;
     public int coins;
     public int gems;
@@ -46,6 +49,7 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
+        topScore = 0;
         coins = 0;
         gems = 0;
         reviveTokens = 3;
@@ -84,6 +88,14 @@ public class ScoreManager : MonoBehaviour
 
     private void LostGameProcedure(GameObject hitObject)
     {
+        if (score > topScore)
+        {
+            topScore = score;
+            topScoreText.text = "TOP SCORE:\n" + topScore.ToString();
+        }
+
+        //save coins and score to database
+
         Transform platform = hitObject.transform.parent.parent;
 
         for (int i = 0; i < 7; i++)
@@ -98,7 +110,7 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
-            stateManager.SetState(StateManager.State.Home);
+            StartCoroutine(stateManager.StateTransition(StateManager.State.Lost, StateManager.State.Home, 0.1f));
         }
     }
 
@@ -115,6 +127,12 @@ public class ScoreManager : MonoBehaviour
             hitObject.gameObject.SetActive(false);
         }
 
+        if (hitObject.CompareTag("Diamond"))
+        {
+            gems += 15;
+            hitObject.gameObject.SetActive(false);
+        }
+
         if (hitObject.CompareTag("Rocket"))
         {
             rocketModeRequest = true;
@@ -126,6 +144,7 @@ public class ScoreManager : MonoBehaviour
             helmetMode = true;
             helmetDurability = defaultHelmetDurability;
             hitObject.gameObject.SetActive(false);
+            character.GetChild(6).gameObject.SetActive(true);
         }
 
         if (hitObject.CompareTag("Wall"))
@@ -157,6 +176,8 @@ public class ScoreManager : MonoBehaviour
         {
             zoneActivatorTokens--;
 
+            
+
             inputManager.zoneRequest = false;
 
             zoneManager.zoneMode = true;
@@ -166,6 +187,7 @@ public class ScoreManager : MonoBehaviour
         if (helmetDurability == 0)
         {
             helmetMode = false;
+            character.GetChild(6).gameObject.SetActive(false);
             helmetDurability = defaultHelmetDurability;
         }
 
