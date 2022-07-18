@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] StateManager stateManager;
     [SerializeField] CountdownTimer countdownTimer;
 
+    [SerializeField] GameObject storeButton;
     [SerializeField] GameObject revivePanel;
 
     [SerializeField] Text scoreText;
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour
         coins = scoreManager.coins;
         gems = scoreManager.gems;
         revivalTokens = scoreManager.reviveTokens;
-        zoneActivatorTokens = scoreManager.zoneActivatorTokens;
+        zoneActivatorTokens = scoreManager.fuelCanisters;
         score = scoreManager.score;
 
         if (stateManager.gameState == StateManager.State.Play)
@@ -74,6 +75,15 @@ public class UIManager : MonoBehaviour
         else
         {
             revivePanel.SetActive(false);
+        }
+
+        if (stateManager.gameState == StateManager.State.Home)
+        {
+            storeButton.SetActive(true);
+        }
+        else
+        {
+            storeButton.SetActive(false);
         }
 
     }

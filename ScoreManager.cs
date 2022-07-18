@@ -33,7 +33,7 @@ public class ScoreManager : MonoBehaviour
     public int coins;
     public int gems;
     public int reviveTokens;
-    public int zoneActivatorTokens;
+    public int fuelCanisters;
 
     [Header("Default Values")]
     public int defaultHelmetDurability = 3;
@@ -50,10 +50,10 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         topScore = 0;
-        coins = 0;
-        gems = 0;
-        reviveTokens = 3;
-        zoneActivatorTokens = 3;
+        coins = 100000;
+        gems = 100000;
+        reviveTokens = 0;
+        fuelCanisters = 0;
 
         currentRevivesLeft = revivesLeft;
 
@@ -172,9 +172,9 @@ public class ScoreManager : MonoBehaviour
     {
         currentTime = System.DateTime.Now;
 
-        if (inputManager.zoneRequest && zoneActivatorTokens > 0)
+        if (inputManager.zoneRequest && fuelCanisters > 0)
         {
-            zoneActivatorTokens--;
+            fuelCanisters--;
 
             
 
